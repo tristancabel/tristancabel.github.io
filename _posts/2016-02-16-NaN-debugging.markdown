@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "NaN debugging"
-date: 2016-02-16
 categories: debug
+tags: debug NaN
 ---
-I reccently came accross a bug in a software I am contributing to causing some NaN to appears. In this software, I want to solve a system **Ax=b** using a sparse linear solver( *Hypre* ) but it failed to converge and told me this message : 
+I recently came accross a bug in a software I am contributing to causing some NaN to appear. In this software, I want to solve a system **Ax=b** using a sparse linear solver( *Hypre* ) but it failed to converge showing this message:
 
 {% highlight bash %}
 ERROR detected by Hypre ...  BEGIN
@@ -15,10 +15,10 @@ ERROR detected by Hypre ...  END
 Hypre PCG finish in 0 iterations with a final res norm of 0
 {% endhighlight %}
 
-I was then about to start a long and complex debugging to find where did these NaNs come from until I discover this question [stakoverflow fortran NaN](http://stackoverflow.com/questions/5636580/force-gfortran-to-stop-program-at-first-nan) talking about a pretty usefull C function define in **fenv.h**:
+I was about to start a long and complex debugging to find where these NaNs came from when I discovered this question [stakoverflow fortran NaN](http://stackoverflow.com/questions/5636580/force-gfortran-to-stop-program-at-first-nan) talking about a pretty useful C function define in **fenv.h**:
 {% highlight C %} feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW); {% endhighlight %}  
 
-Putting this in my main, allowed me to get this error :
+Inserting this in my main allowed me to get this error :
 
 {% highlight bash %}
  *** Process received signal ***
@@ -39,7 +39,7 @@ Putting this in my main, allowed me to get this error :
  [11] /home/tcabel/Devel/num3sis/build/bin/numTracesApp(main+0xf7f)[0x40e025]
 {% endhighlight %}
 
-From that, it is quite straitforward to find the culprit function *comp_bk_24* and the operation *divide by 0* creating the NaN. 
+From this, it is quite straitforward to find the faulty function *comp_bk_24* and the operation *divide by 0* creating the NaN. 
 
 In case you are using Fortran, you can put some compile options to get the same functionnality : 
 
