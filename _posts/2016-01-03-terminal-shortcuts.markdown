@@ -2,7 +2,7 @@
 layout: post
 title: "terminal shortcuts"
 categories: terminal
-tags: terminal
+tags: tips terminal
 ---
 
 Here is some command line shortcuts that can be usefull: 

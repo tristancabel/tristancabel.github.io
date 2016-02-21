@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "floating point arithmetic and precision"
+title: "ARCHIVE 2013 floating point arithmetic and precision"
 categories: archive
-tags: archive precision
+tags: archive IEEE754
 ---
 
 In this post, I want to talk a bit about floating-point arithmetic and precision applied to GPUs!

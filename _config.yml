@@ -7,7 +7,7 @@ title: info-T
 description: 'A HPC developer blog'
 email: tristan@trily.eu
 url: https://trily.eu
-baseurl: ""
+baseurl: /
 
 author:
   name: 'Tristan C.'
