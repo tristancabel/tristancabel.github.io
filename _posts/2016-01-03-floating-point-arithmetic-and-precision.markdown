@@ -5,7 +5,9 @@ categories: archive
 tags: archive precision
 ---
 
-In this post, I want to talk a bit about floating-point arithmetic and precision!
+In this post, I want to talk a bit about floating-point arithmetic and precision applied to GPUs!
+
+<!--more-->
 
 ### IEEE 754 introduction
 Let's start by talking a bit about how do we represent floating-point numbers in digital world. These numbers are defined by the IEEE Standard for Floating-Point Arithmetic (IEEE 754) and as wikipedia says:

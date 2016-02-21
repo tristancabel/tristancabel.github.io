@@ -1,10 +1,28 @@
-# Site settings
-title: info-T
-email: your-email@domain.com
-description: a HPC developer blog. 
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://trily.eu" # the base hostname & protocol for your site
-github_username:  tristancabel
-
-# Build settings
+# Dependencies
 markdown: kramdown
+highlighter: rouge
+
+# Setup
+title: info-T
+description: 'A HPC developer blog'
+email: tristan@trily.eu
+url: https://trily.eu
+baseurl: ""
+
+author:
+  name: 'Tristan C.'
+  url: https://trily.eu/
+
+paginate: 5
+
+excerpt_separator: <!--more-->
+
+github:
+  username: tristancabel
+  repo: https://github.com/tristancabel
+
+gems:
+  - jekyll-paginate
+  - jekyll-gist
+
+exclude: ['README.md', 'LICENSE']

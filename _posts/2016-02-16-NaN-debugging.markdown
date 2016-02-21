@@ -6,7 +6,7 @@ tags: debug NaN
 ---
 I recently came accross a bug in a software I am contributing to causing some NaN to appear. In this software, I want to solve a system **Ax=b** using a sparse linear solver( *Hypre* ) but it failed to converge showing this message:
 
-{% highlight bash %}
+{% highlight shell %}
 ERROR detected by Hypre ...  BEGIN
 ERROR -- hypre_PCGSolve: INFs and/or NaNs detected in input.
 User probably placed non-numerics in supplied b.
@@ -15,12 +15,14 @@ ERROR detected by Hypre ...  END
 Hypre PCG finish in 0 iterations with a final res norm of 0
 {% endhighlight %}
 
+<!--more-->
+
 I was about to start a long and complex debugging to find where these NaNs came from when I discovered this question [stakoverflow fortran NaN](http://stackoverflow.com/questions/5636580/force-gfortran-to-stop-program-at-first-nan) talking about a pretty useful C function define in **fenv.h**:
 {% highlight C %} feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW); {% endhighlight %}  
 
 Inserting this in my main allowed me to get this error :
 
-{% highlight bash %}
+{% highlight shell %}
  *** Process received signal ***
  Signal: Floating point exception (8)
  Signal code: Floating point divide-by-zero (3)
