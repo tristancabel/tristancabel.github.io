@@ -10,7 +10,10 @@ As stated in [Wikipedia](https://en.wikipedia.org/wiki/Heisenbug),
 
 I recently came across one whilst developing a small program:
 
+<!--more-->
+
 - when I tried to run this program from the console, it crashed with a *segmentation fault*
+
 {% highlight bash %}
 DEBUG - Tue Feb 16 12:39:29 2016 - creation of mesher 
 DEBUG - Tue Feb 16 12:39:29 2016 - mesher run 
@@ -25,6 +28,7 @@ Segmentation fault (core dumped)
 {% endhighlight %}
 
  - when I tried to run the same program with the same arguments under **gdb**, it worked fine
+
 {% highlight bash %}
 DEBUG - Tue Feb 16 12:35:34 2016 - creation of mesher 
 DEBUG - Tue Feb 16 12:35:34 2016 - mesher run 
