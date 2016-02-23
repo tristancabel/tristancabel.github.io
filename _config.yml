@@ -22,7 +22,8 @@ github:
   repo: https://github.com/tristancabel
 
 gems:
-  - jekyll-paginate
+  - jekyll-feed
   - jekyll-gist
-
+  - jekyll-paginate
+    
 exclude: ['README.md', 'LICENSE']
