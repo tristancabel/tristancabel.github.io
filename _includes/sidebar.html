@@ -30,7 +30,7 @@
 
        <h3> Tag clouds </h3>
         {% for tag in site.tags %}
-       <a style="font-size: {{ tag | last | size | times: 100 | divided_by: site.tags.size | plus: 70  }}%" href="{{ site.baseurl }}/tags/#{{ tag | first | slugize }}"> {{ tag | first }}{{tag.time}}  </a>
+       <a style="font-size: {{ tag | last | size | times: 100 | divided_by: site.tags.size | plus: 70  }}%" href="{{ site.baseurl }}/tags/#{{ tag | first | slugize }}"> {{ tag | first }}({{tag[1].size}})  </a>
        {% endfor %}
       
     </nav>
