@@ -6,7 +6,7 @@ highlighter: rouge
 title: info-T
 description: 'A HPC developer blog'
 email: tristan@trily.eu
-url: http://trily.eu
+url: http://info-t.trily.eu
 baseurl: ""
 
 author:
