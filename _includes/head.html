@@ -20,11 +20,25 @@
   <link rel="stylesheet" href="{{ site.baseurl }}/public/css/main.css">
   <link rel="stylesheet" href="{{ site.baseurl }}/public/css/monokai.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
-
+  
   <!-- Icons -->
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ site.baseurl }}/public/apple-touch-icon.png">
   <link rel="shortcut icon" href="{{ site.baseurl }}/public/icon.ico">
 
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- script -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.menu-deroulant li ul').hide();
+      $('.menu-deroulant li a').click(function(){
+        $(this).toggleClass('right bottom');
+        $(this).parent().children('ul').slideToggle(250);
+        $(this).parent().siblings().children('ul').slideUp(250);
+        $(this).parent().siblings().switchClass('right bottom');
+      });
+    });
+  </script>
 </head>

@@ -431,6 +431,22 @@ tbody tr:nth-child(odd) th {
     padding-right: 20px;
 }
 
+.menu-deroulant {
+    position: absolute;
+    padding : 0; /* pas de marge intérieure */
+    margin : 0; /* ni extérieure */
+    list-style-type: none;
+}
+
+.menu-deroulant ul /* Liste */     
+{
+    min-height: 0;
+    display: block;
+    padding: 0;
+    list-style-type: none;
+}
+
+
 .chevron::before {
 	border-style: solid;
 	border-width: 0.25em 0.25em 0 0;
