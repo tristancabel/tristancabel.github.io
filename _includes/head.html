@@ -37,7 +37,7 @@
         $(this).toggleClass('right bottom');
         $(this).parent().children('ul').slideToggle(250);
         $(this).parent().siblings().children('ul').slideUp(250);
-        $(this).parent().siblings().switchClass('right bottom');
+        $(this).parent().siblings().children('a').removeClass('bottom').addClass('right');
       });
     });
   </script>

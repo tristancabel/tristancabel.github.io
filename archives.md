@@ -4,7 +4,7 @@ permalink: /archives/
 ---
 
 <div>
- <ul class="menu-deroulant">
+ <ul>
   {%for post in site.posts %}
       {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
       {% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}    
@@ -18,17 +18,17 @@ permalink: /archives/
           </ul> <!-- close year -->
           </li>
         {% endif %}
-          <li> <a class="chevron right" href="#"> {{ post.date | date: '%Y' }}</a> 
-          <ul id="{{ post.date | date: '%Y' }}" >
-            <li><a class="chevron right" href="#"> {{ post.date | date: '%b' }}</a>
-            <ul id="{{ post.date | date: '%Y%b' }}">
+          <li> <a href="#"> {{ post.date | date: '%Y' }}</a> 
+          <ul>
+            <li><a href="#"> {{ post.date | date: '%b' }}</a>
+            <ul>
 
       {% else %}
         {% if month != nmonth %}
           </ul>  <!-- close month -->
           </li>
-            <li><a class="chevron right" href="#"> {{ post.date | date: '%b' }}</a>
-            <ul id="{{ post.date | date: '%Y%b' }}">
+            <li><a href="#"> {{ post.date | date: '%b' }}</a>
+            <ul>
 
         {% endif %}
       {% endif %}
