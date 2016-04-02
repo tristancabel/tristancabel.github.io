@@ -46,7 +46,7 @@ First, let's try to see in which areas is this crime occuring.
 
 We can observe that this crime is really concentrated in one neighboorhood, even more that the first map (containing all the crimes).
 
-Now let's see if this type of crime is more occuring at some specific times and if is distributed evenly during the week:
+Now let's see if this type of crime is more occuring at some specific times and if it is distributed evenly during the week:
 <img src="{{ site.url }}/public/6_crime_vis/larceny_per_day.png" width="900">
 
 <img src="{{ site.url }}/public/6_crime_vis/larceny_per_hour.png" width="900">
