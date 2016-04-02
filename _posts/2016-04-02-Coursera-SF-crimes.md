@@ -11,17 +11,19 @@ In this assignment, we are trying to analyze crime occured in San Francisco durr
 <!--more-->
 
 
-We will show that the crimes occure mostly during the evening and that most of the crimes belong to the category **LARCENY/THEFT**. Moreover, we will show that this type of crime is mostly occuring in a certain neighboorhood.
+We will show that the crimes occur mostly during the evening and that most of them belongs to the category **LARCENY/THEFT**. Moreover, we will show that this type of crime is concentrated in a certain neighboorhood.
 
 ### All Crimes 
-To start, let's look at the time distribution of all the crimes per day.  
+To start, let's look at the time distribution of all the crimes in a week. In abscisse, we define a variable HourOfWeek as this : *Monday 00:00 = 0, Monday 01:00 = 1 , Monday 13:00 = 12 , Tuesday 00:00 = 24,* ...). 
+
+<img src="{{ site.url }}/public/6_crime_vis/crimes_distribution_per_hour.png" width="900">
+
+we can clearly see that most of the crimes are occuring during the afternoon/evening! However, I expected most crime to occur during the week end, but the following figure show that it's not so obvious.
 
 <img src="{{ site.url }}/public/6_crime_vis/crimes_per_day.png" width="900">
 
-Here, we plotted the number of crimes per day. we can see that there is a slight increase of crimes during the week end but less than what we were expecting. However, if we plot the crime distribution on each hour of a week (*Monday 00:00 = 0, Monday 01:00 = 1 , Tuesday 00:00 = 24,* ...) we can 
-clearly see that most of the crimes are occuring during the afternoon/evening!
+There is just a slight increase of crimes during the week end.
 
-<img src="{{ site.url }}/public/6_crime_vis/crimes_distribution_per_hour.png" width="900">
 
 We can also try to see if some neighboorhood are more dangerous than others in San Francisco.
 
@@ -34,7 +36,7 @@ Now, let's look at the top crime categories
 
 <img src="{{ site.url }}/public/6_crime_vis/category.png" width="1024">
 
-We can see that the top crime here is **LARCENY/THEFT** by a huge margin so let's focus on it.
+We can see that the top crime here is **LARCENY/THEFT** by a huge margin so let's focus on this category of crimes.
 
 ### Larceny/Theft crimes
 
@@ -42,12 +44,12 @@ First, let's try to see in which areas is this crime occuring.
 
 <img src="{{ site.url }}/public/6_crime_vis/map_larceny.png" width="1024">
 
-We can observe that this crime is really concentrated in one neighboorhood, even more that the first map.
+We can observe that this crime is really concentrated in one neighboorhood, even more that the first map (containing all the crimes).
 
-Now let's see if this type of crime is more occuring at some hours or during some days:
+Now let's see if this type of crime is more occuring at some specific times and if is distributed evenly during the week:
 <img src="{{ site.url }}/public/6_crime_vis/larceny_per_day.png" width="900">
 
 <img src="{{ site.url }}/public/6_crime_vis/larceny_per_hour.png" width="900">
-On the first figure, as opposed to when we were considering all the crimes, we can clearly see that there is an increase of *Larceny/Theft* crimes during Friday and the Week end. Moreover, the second figure tell us that most of the crimes are occuring during the afternoon. Lastly, we can also notices that there is a decrease of crime everyday just after lunch. Maybe it's a nap time effect?
+On the first figure, as opposed to when we were considering all the crimes, we can clearly see that there is an increase of *Larceny/Theft* crimes during Friday and the Week end. Moreover, the second figure tell us that most of the crimes are occuring during the afternoon. Lastly, we can also notices that there is a decrease of crime everyday just after lunchtime everyday. Maybe it's a nap time effect?
 
-To finish, here is the [script]({{site.url}}/public/6_crime_vis/crime_visu.py) used to create my pictures.
+For reproctibility, here is the [script]({{site.url}}/public/6_crime_vis/crime_visu.py) used to create my pictures.
