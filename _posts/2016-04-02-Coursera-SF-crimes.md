@@ -2,7 +2,7 @@
 layout: post
 title: "COURSERA Data Science, SF crime analysis"
 categories: coursera
-tags: coursera python visualization
+tags: coursera python visualisation
 ---
 
 
