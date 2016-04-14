@@ -153,7 +153,7 @@ In order to do simulation, rendering, and visualisation on three different machi
 
 Here is a video showing these steps
 
- <iframe width="420" height="315" src="http://www.youtube.com/embed/jGKx3S3uh-8"> </iframe> 
+ <iframe width="840" height="630" src="http://www.youtube.com/embed/jGKx3S3uh-8"> </iframe> 
 
 
 
