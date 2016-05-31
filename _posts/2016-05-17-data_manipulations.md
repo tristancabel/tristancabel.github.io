@@ -5,7 +5,7 @@ categories: bigdata
 tags: bigdata  SQL NoSQL
 ---
 
-Notes on first lesson of Coursera big data specialization.
+First part of notes of Coursera big data specialization.
 <!--more-->
 
 Data science operates over 4 dimensions :
