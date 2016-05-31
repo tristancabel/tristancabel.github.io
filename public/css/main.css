@@ -624,3 +624,11 @@ a.sidebar-nav-item:focus {
   }
 }
 
+
+
+/*
+ script display for tex/math
+*/
+#katex-content script {
+    display: block;
+}
