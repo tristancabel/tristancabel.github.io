@@ -40,6 +40,18 @@ The first step we have to do is define on which data to train. In Supervized lea
 Then here is some usefull methods to train your algorithm:
 
 ### bootstrap
+boostrap is:
+
+ - Given a dataset of size N
+ - Draw N samples *with replacement* to create a new dataset
+ - Repeat ~1000 times
+ - compute ~1000 sample statistics and interpret these as repeated experiments 
+
+But keep in mind that:
+
+ - bootstrap may underesstimate the confidence interval for small samples
+ - bootstrap cannot be used to estimate the min or max of a population
+ - samples need to be independant
 
 ### bagging
 bagging consist of training a lot of weak models and use them together to get a strong model.

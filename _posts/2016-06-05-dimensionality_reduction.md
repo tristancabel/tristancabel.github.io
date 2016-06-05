@@ -8,6 +8,13 @@ tags: bigdata machine_learning
 In machine learning and statistics, dimensionality reduction or dimension reduction is the process of reducing the number of random variables under consideration, via obtaining a set of "uncorrelated" principal variables. It can be divided into feature selection and feature extraction.
 <!--more-->
 
+Before starting to talk about feature selection, let's introduce 2 mathematical terms we will need:
+
+
+ - **covariance**: $cov(x,y) = \sum_i (x_i - u_x)(y_i - u_y)$
+ - **correlation**: = covariance/standard deivation $corr(x,y) = \frac{cov(x,y)}{\sqrt{\sum_i (x_i - u_x)^2}\sqrt{\sum_i (y_i - u_y)^2}}$
+
+
 ## Feature selection
 In machine learning and statistics, **feature selection**, is the process of selecting a subset of relevant features (variables, predictors) for use in model construction. Feature selection techniques are used for three reasons:
 

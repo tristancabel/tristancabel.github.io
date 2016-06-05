@@ -8,11 +8,15 @@ tags: bigdata machine_learning statistics
 Second part of notes of Coursera big data specialization.
 <!--more-->
 
-## practical statistical interference
+# practical statistical interference
 statistical interference is a method for drawing conclusions about a population from sample data. It has two key methods: **Hypothesis tests** (significance tests) and **confidence intervals**.
 
-### Hypothesis testing
-It's comparing an experimental group and a control group
+Before exploring these methods, let's introduce the curse of big data as defined by *Vincent Granville*:
+
+> The curse of big data is the fact that when you search for patterms in very, very large data sets with billions or trillions of data points and thousands of metrics, you are bound to identify coincidences that have predictive power.
+
+## Hypothesis testing
+It's comparing an experimental group and a control group. Studying the probability of seeing data given the null hypothesis is called the **frequentist approach to statistics** as opposed to the **bayesian approach to statistics**.
 
  - $H_0$ Null hypothesis = no differences between the groups
  - $H_A$ Alternative hypothesis = statistically significant difference between the groups. "difference" defined in terns of some **test statistic**.
@@ -39,18 +43,16 @@ It's comparing an experimental group and a control group
   </tbody>
 </table>
 
-For the difference, we do not know if the difference in two treatments is not just do to chance but we can calculate the odds that it is. It's the **p-value**: In repeated experiments at this sample size, how often would you see a result at least this exterme assuming the null hypothesis? Usually a **threasold of 0.05** is used.
+For the difference, we do not know if the difference in two treatments is not just do to chance but we can calculate the odds that it is. It's the **p-value**: In repeated experiments at this sample size, how often would you see a result at least this extrem assuming the null hypothesis? Usually a **threasold of 0.05** is used.
 
-Note that studying the probability of seeing data given the null hypothesis is called the **frequentist approach to statistics** as opposed to the **bayesian approach to statistics** that we will see later.
-
-We will now study two methods to ensure results are significant. Let's use a test case of cancer treatment, comparing two treatments using mean days of survival.
-
-### Classical method: derive the sampling distribution
-We make the assumptions that:
+We will now study two methods to ensure results are significant. Let's use a test case of cancer treatment, comparing two treatments using mean days of survival. We make the assumptions that:
 
  - the number of survival days follows a *normal distribution*
  - the variances of the two set of patients are the same
  - (or that the sample size are the same)
+
+
+### Classical method: derive the sampling distribution
 
 Let's construct a **t-statistic**:  $t = \frac{statistic - hypothetized\ value}{estimated\ standard\ error\ of\ statistic}$
 
@@ -63,43 +65,29 @@ and using the *central Limit theorem*,  $\sigma_{\bar{S}}^2 = \frac{\sigma_S^2}{
 
 We also need to compute the degree of freedom with a formula TODO .
 
-### Monte Carlo simulation
-we are asking questions of the form : "what would happen if we ran this experiment 1000 times?" . --> do a simulated experiment
+### Computational method
+Instead of formally computing these terms, we can use a computational method such as:
 
-### Resampling
-It consists of mixing the values between test and standard results. Then recompute the means, and the difference in the means. Re do this at least 10000 times. You can then see if the difference in the means in the initial results is significant.
-The key assumption is independance.
+ - **Monte Carlo simulation** "what would happen if we ran this experiment 1000 times?" . --> do a simulated experiment
+ - **Resampling** : mix values between test and standard results. Then recompute the means, and the difference in the means. Re do this at least 10000 times. We can then see if the difference in the means in the initial results is significant. The key assumption is independance.
+ 
 To decide when the result can be considered significant, consider the null hypothesis, run the experiment and compute the 5th and 95th percentiles of all the different results.
 
-### Bootstrap
-boostrap is:
-
- - Given a dataset of size N
- - Draw N samples *with replacement* to create a new dataset
- - Repeat ~1000 times
- - compute ~1000 sample statistics and interpret these as repeated experiments 
-
-But keep in mind that:
-
- - bootstrap may underesstimate the confidence interval for small samples
- - bootstrap cannot be used to estimate the min or max of a population
- - samples need to be independant
-
-### effect size
+## effect size
 Effect size is used to try to see *how* significant a result is (not only if it is significant or not). It is used prolifically in meta-analysis to combine results from multiple sudies. $ES = \frac{Mean\ of\ experimental\ group - Mean\ of\ control\ group}{standard\ deviation}$
 
 $ES = \frac{\bar{X_1} - \bar{X_2}}{\sigma_{pooled}}$  with $\sigma_{pooled}=\sqrt{\frac{\sigma_1^2(n_1 -1) + \sigma_2^2(n_2 -1) }{(n_1-1 + (n_2-1))}}$
 
 From this, we can say that **a standardized mean difference effect size of 0.2 is small, 0.5 is medium and 0.8 is large**.
 
-### Meta-analysis
+## Meta-analysis
 From Fisher(1944)
 
 > When a number of quite independant tests of significance have been made, it sometimes happens that although few or none can be claimed individually as significant, yet the aggregate gives an impression that the probabilities are on the whole lower than would often have been obtained by chance.
 
 So it's aggragating results! We can use a weighted average, average across multiple studies, but give more weight to more precise studies. We can define weights has inverse-variance wight $w_i = \frac(1}{se^2}$ (se = standard error) or use a simple method: weight by sample size
 
-### Benford's Law
+## Benford's Law
 *Benford's Law* is a tool to detect fraud
 An example to intuite how it workds is this:
 
@@ -110,7 +98,7 @@ An example to intuite how it workds is this:
 The first digit of our data should follow the same distribution. However, to use it, data has to span over several orders of magnitude and it can't have min/max cutoffs.
 
 
-### Multiple hypothesis testing
+## Multiple hypothesis testing
 
  - if you perform experiments over and over, you're bound to find something.
  - this is a bit different than the publication bias problem: same sample, different hypotheses
@@ -129,14 +117,6 @@ Solutions of familywise error rate corrections are (sidak being the more conserv
 
 Another less conservative solution is considering the **false discovery rate**  $FDR= Q = \frac{FD}{FD + TD}$
 
-
-### Curse of big data
-
-> The curse of big data is the fact that when you search for patterms in very, very large data sets with billions or trillions of data points and thousands of metrics, you are bound to identify coincidences that have predictive power.
-From Vincent Granville 
-
-**covariance**: $cov(x,y) = \sum_i (x_i - u_x)(y_i - u_y)$
-**correlation**: = covariance/standard deivation $corr(x,y) = \frac{cov(x,y)}{\sqrt{\sum_i (x_i - u_x)^2}\sqrt{\sum_i (y_i - u_y)^2}}$
 
 
 
@@ -164,5 +144,5 @@ question:
  - A women in this age group had a positive mammography in a routine screening
  
 What is the probability that she actually has breast cancer?
-$P(positive) = P(positive|cancer)*P(cancer) + P(positive|no_cancer)*P(no_cancer) = 0.8*0.01 + 0.096*0.99 = 0.103$
-$P(cancer|positive) = |fraq{P(positive|cancer)*(P(cancer)}{P(positive)} = (0.8*0.01)/0.103 = 0.78$ = 78%$
+$P(positive) = P(positive\|cancer) \times P(cancer) + P(positive\|no_cancer) \times P(no_cancer) = 0.8 \*0.01 + 0.096 \* 0.99 = 0.103$
+$P(cancer\|positive) = frac{P(positive\|cancer) \times (P(cancer)}{P(positive)} = \frac{0.8\*0.01}{0.103} = 0.78 = 78\%$
