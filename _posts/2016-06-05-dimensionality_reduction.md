@@ -72,7 +72,7 @@ Such criticisms, based upon limitations of the relationship between a model and 
 
 
 ## Feature extraction
-In machine learning, pattern recognition and in image processing, feature extraction starts from an initial set of measured data and builds derived features intended to be informative and non-redundant, facilitating the subsequent learning and generalization steps, and in some cases leading to better human interpretations. Feature extraction is related to dimensionality reduction. General dimensionality reduction techniques includese:
+In machine learning, pattern recognition and in image processing, feature extraction starts from an initial set of measured data and builds derived features intended to be informative and non-redundant, facilitating the subsequent learning and generalization steps, and in some cases leading to better human interpretations. Feature extraction is related to dimensionality reduction. General dimensionality reduction techniques includes:
 
  - Independent component analysis
  - Isomap
@@ -86,6 +86,11 @@ In machine learning, pattern recognition and in image processing, feature extrac
  - Multilinear subspace learning
  - Semidefinite embedding
  - Autoencoder
+
+## adding dimensions
+Some time, we may want to do the opposite and had more dimensions. To do so, we can:
+
+ - add cross-product terms $\phi(1,x_1,x_2) = (1,x_1, x_2, x_1^2, x_2^2, x_1 x_2)$
 
 ## References
 
