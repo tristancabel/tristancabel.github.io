@@ -57,6 +57,15 @@ In relational database, everything is a table, every row in a table has the same
   - **grouping(g)** : `GROUP BY` example : `SELECT city,count(*) FROM sales GROUP BY city having sum(price)>100`
   - **sorting(s)** : `ORDER BY`
 
+
+<figure>
+  <div style="text-align: center">
+    <img style="display: inline;" src="{{ site.baseurl }}/public/Visual_SQL_JOINS.jpg" alt="visual SQL JOINS" width="50%">
+    <figcaption> Fig1. Visual-Representation of SQL JOINS </figcaption>
+  </div>
+</figure>
+Picture from [Visual-Representation of SQL JOINS](http://www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins)
+
 There is also a concept called **view**. A view is a query with a name and we can use it just like a real table! `CREATE VIEW viewName AS SELECT x.store FROM Purchase x WHERE ..`
 
 ## Map Reduce
