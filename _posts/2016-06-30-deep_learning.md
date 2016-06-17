@@ -92,6 +92,41 @@ Complex learning machines can be built by assembling **modules** into networks. 
  - Cost Module: squared distance $C= \|\|In_1 - In_2 \|\|^2$
  - cross entropy (good for classification)
 
+# mathematical mysteries of convolutional networks
+Let's take a classification problem, we want to find a minimum of some invariants features to do classification efficiently. Indeed, reducing the dimensionality means that we will need less examples to learn how to do our classification.
+In low dimension, it's quite easy to do some *linear interpolation*, but it's not possible in big dimensionality as the distance between two example is too big. 
+
+Another basic idea is to do a *linear projection*, but most of the time, it will lead to loss of informations because of non-linearities. However, we can first do a transformation to linearize the problem and then do the projection. An example of this is **kernel classifiers** :
+
+ 1. Find a change of variable $\Phi(x) = \{ \phi_k(x) \}_{k \leq d^{prim}}$ it leads to linearization separation
+ 2. Find a linear projection $\langle \Phi(x),w \rangle = \sum_k w_k \phi_k(x)$
+
+<figure>
+  <div style="text-align: center">
+    <img style="display: inline;" src="{{ site.baseurl }}/public/deep_learning_lecun_cdf/kernel_classifier.png" alt="kernel classifier">
+          <figcaption> Fig1. kernel classifier </figcaption>
+  </div>
+</figure>
+
+However, it is really difficult to find such a $\Phi$ ! This is where neural network comes: We make our $\Phi$ as a combination of convolutional nodes ( linear convolutions + non-linear scalar). Let's try to understand what are the mathematics behind it.
+Why hierarchical network cascade? why convolutions? why indtroducing non-linearities? What are the properties of the learned linear operators $L_j$ ? Intuition of how it works is a we go deeper we kill variablility and create invariants! It works a bit like mathematical wavelet filter.
+
+Conclusions we can take from Stephane Mallat presentation are :
+
+ - Channel connections linearize other symmetries
+ - Invariance to rotations are computed by convolutions
+ - The convolution network operators $L_j$ have many roles (but difficult to separate these roles when analyzing learned network):
+    - Linearize non-linear transformations (symmetries)
+    - Reduce dimension with projections
+    - Memory storage of « characteristic » structures
+ - Deep convolutional networks have spectacular high-dimensional approximation capabilities ( notions of complexity, regularity, approximation theorems):
+    - Seem to compute hierarchical invariants of complex symmetries
+    - Used as models in physiological vision and audition
+    - Close link with particle and statistical physics
+    - Outstanding mathematical problem to understand them:
+
+
+
 # Convolutional net (CNN)
 
 As an **introduction**, let's take a module taking a time-delayed input $R = F(X_t, X_{t-1}, X_{t-2}, W)$ and we want to have $Y_{t+1} = R$. For example, predict the next character or word in a text, or predict the evolution of stock-market.  We can see that the unit computing $R = F(X_t, X_{t-1}, X_{t-2}, W)$ at instant $t$ is the same that will be used as $t+1$ so weights will be the same. The idea of replicate units is quite used in visual recognition to detect a motif in different parts of a picture (detect a digit in check recognition for example) using **convolution**.
@@ -147,6 +182,70 @@ A good to know RNN type is **LSTM (Long Short Term Memory)** to fix the long ter
 
 With this type of network *Sutskever et al, NIPS 2014* made a translation language software. Language modeling is made using a combination of CNN and LSTM in *"Exploring the limits of Language Modeling" R. Jozefowicz, O. Vinyals et al*
 
+# Optimization or neural network
+
+look for Markov model
+
+better learn bias a bit faster than weights. scaling all biases by $\sqrt{n}$ seems to work well enough...
+
+Training on data x is not equivalent to training on data 1 − x . A sigmoid learn faster when there is 1 instead of 0 on input. Using sigmoid or tanh is closely related to the x vs 1 − x problem.
+
+### Can we avoid model rewriting?
+Going back to the original recurrent NN model for text, there are dozens (actually: an infinite number) of such possible rewritings:
+Two strategies:
+
+- Try to identify variables that work best (eg: LSTMs)
+ - Use a learning algorithm that is insensitive to model rewriting: an “invariant” algorithm
+
+Classical such algorithm: Amari’s natural gradient using the inverse Fisher metric. But its algorithmic cost is O((#params) 2 dim(output)) per data point. => **Unusable for neural networks unless you have ≈ 100 neurons or #independent parameters ≪ network size.**
+
+
+### Why invariant training algorithms?
+
+Invariance often provides:
+
+ - Fewer arbitrary choices, no model rewriting, fewer magic numbers
+ - Often, better performance
+ - **performance transfer**: good performance observed in a particular set of experiments automatically applies to a whole class of equivalent problems under a certain group of transformations
+
+
+### Gradient descent: a physicist’s viewpoint
+Gradient descent on loss function L(θ) iterates with $\theta^{k+1} = \theta^k - \eta \frac{\partial L(\theta^k)}{\partial \theta}$
+If we do a dimensional analysis, unit of $\frac{\partial L}{\partial \theta} = \frac{unit\ of\ L}{unit\ of\ \theta}$ . So the gradient descent $\theta \leftarrow \theta - \eta \frac{\partial L}{\partial \theta}$ **is not homogeneous unless** $unit\ of\ \eta = unit\ of\ \theta^2$ 
+
+Indeed, for small learning rate $\eta$, the gradient descent computation is equivalent to $\theta^{k+1} = arg \min_\theta \( L(\theta) + \frac{1}{d\eta} \Vert \theta - \theta^k \Vert^2 \)$ which depends on the numerical representation of $\theta$! Even a change of basis for $\theta$ is not neutral (ex scaling some components of $\theta$).
+
+nvariant gradient descents: 
+Solution: use a norm $\Vert \theta - \theta^{prim} \Vert$ that depends on what the network does, rather than how $\theta$ and $\theta^{prim}$ are represented as numbers for example **Riemannian metrics** are norms $\Vert \partial \theta \Vert^2 = \partial \Theta^T M(\theta) \partial \theta$ (for $\theta^{prim} = \theta + \partial \theta$ infinitesimally close to $\theta$) with $M(\theta)$ a well-chosen positive definite matrix depending on $\theta$ It leads to :
+
+ - Riemannian gradient descent $\theta^{k+1} = \theta^k - \eta M(\theta)^{-1} \frac{\partial L(\theta^k)}{\partial \theta}$
+ - For natural gradient $M(\theta)$ = Fisher information matrix
+
+Two possible strategies to build a metric M(θ) and norm ‖θ − θ ′ ‖ M to obtain invariance wrt the representation of θ, in a scalable way:
+
+ 1. Try to *scale down the natural gradient* defined by the Fisher matrix. See also [Martens–Grosse 2015]. Related to AdaGrad without the square root. [Le Roux–Manzagol–Bengio 2007] use a small-rank reduction, but this *breaks invariance*.
+ 2. Try to *backpropagate a metric on the output*, layer by layer, until you get a metric on the parameters. Related to backpropagation with square weights used in the diagonal Gauss–Newton approximation of the Hessian [LeCun–Bottou–Orr–Müller 1996] , but keeping only the diagonal breaks invariance.
+
+### Neural networks: fancy differential geometric setting
+
+A Neural network is a  finite, directed acyclic graph L (“units”, “neurons”). Each unit $i \in L$ has an activity $a_i \in A_i$ where $A_i$ is some abstract manifold.
+
+Activities for each input $x_k$ are computed by propagating $a_i = f_{i,\theta_i} ((a_j)_{j \rightarrow i})$
+
+using an activation function $f_i : \Theta \times \prod\limits_{j \rightarrow i} A_j \rightarrow A_i$ depending on trainable parameters $\theta_i$ in a manifold $\Theta_i$
+
+$\Rightarrow$ Any algorithm defined in this language has a performance that is independent from the manifold coordinates used to implement it
+But the gradient descent is not well-defined in this space.
+
+
+slide 73/115 of presentation 003-yann-ollivier
+
+
+
+
+
+
+
 # Energy-based Learning
 
 <div class="row">
@@ -189,7 +288,108 @@ The big problem is *what loss funciton will make the machine approach the desire
   
 There is also *graph transformer network*
 
-next : 25/03 
+
+## Elastic Average SGD  (EASGD)
+For distributing SGD over multiple CPU/GPU nodes
+
+ - Expected Loss : $\min\limits_x F(x) := E[f(x,\xi)]$
+ - Distributed form : $\min\limits_{x^1, \cdots, x^\rho} \sum\limits_{i=1}^r E[f(x^i,\xi^i)] + \frac{\rho}{2} \Vert x^i - \bar x \Vert^2$
+
+with $\rho$ workers . Each worker get samples of the full dataset. They run momentum SGD asynchronously with $L^2$ penalty $\rho \Vert x^i - \bar x \Vert^2$ . Then worker i & master node 9server) communicates weights and server updates x slowly $x = x + \alpha(x^i -x)$.
+
+$\frac{\rho}{2} \Vert x^i - \bar x \Vert^2$ is an elastic term which prevent workers from diverging to much from the central node.
+
+This is parallelization by data! For more information, look for **Elastic Average Momentum SGD**.
+
+
+# Target prop
+The idea is propagate targets instead of gradients . It is used in RNN for speech recognition for example.
+First, let's do a lagrangian formulation of backprop :
+
+$L(Z,\lambda,W) = D(G_{S-1}, Z_S) + \sum\limits_{i=1}^S \lambda_i^T [ Z_i - G_i (Z_{i-1}, W_i)]$ with
+
+ - $D(G_{S-1}, Z_S)$ cost function we want to minimize
+ - $Z_S$  desired output
+ - layers are $i$ indices,
+ - $\sum\limits_{i=1}^S \lambda_i^T [ Z_i - G_i (Z_{i-1}, W_i)]$ connections in the network exprimed as constraints saying that output of layer $i$ should be equal to input of layer $i+1$ which is $Z_i$
+  - $\lambda_i^T$ is a Lagrange multiplier (which is a vector)
+
+So to do constraint optimization, we want to minimize the lagrangian relative to variables that interest us and we maximize is relative to Lagrange multiplier. So we compute the gradient
+
+ - relative to the lagrange multiplier : $\partial(L(Z,\lambda, W)/ \partial lambda^k = 0 \ \Rightarrow \  Z_i = G_i(Z_{i-1}, W_i)$
+ - relative to $Z_{i-1} :  $ $\partial(L(Z,\lambda, W)/ \partial Z_{i-1}^k = 0 \ \Rightarrow \  \lambda_{i-1} = [\partial G_i(Z_{i-1}, W_i)/\partial Z_{i-1}] \lambda_i$
+
+We can then relax the constraint: Zi becomes a "virtual target" for layer i
+
+$L(Z,W) = D(G_{S-1}, Z_S) + \sum\limits_{i=1}^S \alpha_i \Vert Z_i - G_i (Z_{i-1}, W_i) \Vert^2$
+
+It now requires an optimization step with respect to virtual targets Z. It allows us to add penalties Z, such as sparsity, quantization..
+
+
+#Other network
+
+## Gating and attention
+Connections are activated depending on context. Input of a unit is selected among several by the softmax output of s sub-network (the unit pay attention to a particular location)
+
+Used for pictures legend,  speech translation
+
+## Memory-augmented neural nets
+Recurrent networks cannot remember things for very long (the cortex only remember things for 20 seconds), so we need a "hippocampus" (a separate memory module). Ex:
+
+ - differentiable memory : stores Key-Value pairs (Ki, Vi) and take as input (address) X. Then, define coefficients $C_i = \frac{e^{K_i^T X}}{\sum\limits_j e^{K_j^T X}}$  and the output $Y = \sum\limits_i C_i V_i$
+ - stack-augmented RNN [Joulin & Mikolov, ArXiv:1503.01007]
+
+# Unsupervized Learning
+The three missing pieces for AI (besides computation) are:
+
+ 1. Integration, representation/Deep Learning with reasoning, Attention, planning and memory ( a few bits for some samples = cherry)
+ 2. Integrating supervized, unsupervized and reinforcement learning into a single "algorithm" ( 10 to 10k bits per sample = icing)
+ 3. Effective ways to do unsupervized learning ( millions of bits per sample = cake)
+
+Most of the learning performed by animals and humans is unsupervised, we build a model of the world through perdictive unsupervised learning. This predictive model gives us "common sense".
+
+unsupervised learning can be based on reconstruction or prediction. Indeed, reconstruction is just prediction with delay 0 but the world is only partially predictable.
+Even if the world were noiseless and quasi deterministic, our current methods would fail. Our failure to do unsupervised learning has nothing to do with our inability to model probability distributions in high-dim spaces, it has to do with our inability to capture complex regularities.
+
+
+One of the difficulty in unsupervized learning is that the output is a set (or a distribution) as the training samples are mereley representatives of a whole set of possible outputs.
+Question how do we design a loss function so that the machine is enticed to ouput points on the data manifold, but not punished for producing points different from the desired output in the training set?
+
+One strategy is **energy-based unsupervised learning**. It consist of learning an *energy function* that takes low values on the data manifold and higher values everywhere else
+
+We could also try to transform energies into probabilities :
+
+ - energy can be interpreted as an unnormalized log density
+ - using a Gibbs distribution (beta parameter being akin to an inverse temperature) : $P(Y \vert W) = \frac{e^{-\beta E(Y,W)}}{\int_y e^{-\beta E(Y,W)}}$ and $E(Y,W) \propto -\log P(Y \vert W)$
+ - However, the denominator is often intractable!! So using probabilities restrict us to certain cost function! $\Rightarrow$ don\t compute probabilities unless you absolutely have to
+
+Here is eight strategies to shape the energy function:
+
+ 1. build the machine so that the volume of low energy stuff is constant *PCA, K-means, GMM, square ICA*
+<figure>
+  <div style="text-align: center">
+    <img style="display: inline;" src="{{ site.baseurl }}/public/deep_learning_lecun_cdf/constant_volume_of_low_energy.png" alt="constant_volume_of_low_energy">
+          <figcaption> Fig3. constant volume of low energy </figcaption>
+  </div>
+</figure>
+
+ 2. push down of the energy of data points, push up everywhere else *Max likelihood (needs tractable partition function)*
+ 3. push down of the energy of data points, push up on chosen locations *contrastive divergence, Ratio Matching, Noise Contrastive Estimation,Minimum Probability Flow*
+ 4. minimize the gradient and maximize the curvature around data points *score matching*
+ 5. train a dynamical system so that the dynamics goes to the manifold *denoising auto-encoder*
+ 6. use a regularizer that limits the volume of space that has low energy *Sparse coding, sparse auto-encoder, PSD*
+ 7. if $E(Y) = \Vert Y - G(Y) \Vert^2$, make $G(Y)$ as "constant" as possible. *Contracting auto-encoder, saturating auto-encoder*
+ 8. Adversarial training: generator tries to fool real/synthetic classifier.
+
+<figure>
+  <div style="text-align: center">
+    <img style="display: inline;" src="{{ site.baseurl }}/public/deep_learning_lecun_cdf/energy_functions_of_various_methods.png" alt="energy functions of various methods">
+          <figcaption> Fig4. energy functions of various methods </figcaption>
+  </div>
+</figure>
+
+
+next : 15/04 
 
 
 # References
