@@ -389,6 +389,29 @@ Here is eight strategies to shape the energy function:
 </figure>
 
 
+## Learning to Infer LISTA
+Iterative algorithm that converges to optimal sparse code
+
+```
+Y -> [ W_e ] --> [ + ] --> [ sh() ] --> [ Z ] -->
+                   |                      |
+                   |---<---[ S ]<----------
+
+```
+
+
+ - $Z(t+1) = Shrinkage_{\lambda/L} [ Z(t) - \frac{1}{L} W_d^T(W_d Z(t) - Y)]$
+ - $Z(t+1) = Shrinkage_{\lambda/L}  [ W_e^T Y + S Z(t)]$ with $W_e = \frac{1}{L} W_d^T$ and $S= I - \frac{1}{L} W_d^T W_d$
+ - S laterail Inhibition
+
+So think of the FISTA flow graph as a recurrent neural net where $W_e$ and $S$ are trainable parameters. Learn We and S matrices with "backprop-through-time"
+
+## adversarial learning
+
+TODO
+
+
+
 next : 15/04 
 
 
