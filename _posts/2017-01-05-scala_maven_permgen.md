@@ -128,4 +128,4 @@ Heap Configuration:
    G1HeapRegionSize = 0 (0.0MB)
 {% endhighlight %}
 
-Looking for references to add, I also found this interesting: [plumbr-permgen-space](https://plumbr.eu/outofmemoryerror/permgen-space). 
+Looking for references to add, I also found this interesting: [plumbr-permgen-space](https://plumbr.eu/outofmemoryerror/permgen-space) . 
