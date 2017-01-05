@@ -26,4 +26,7 @@ gems:
   - jekyll-gist
   - jekyll-paginate
     
-exclude: ['README.md', 'LICENSE']
+exclude: 
+  - 'README.md'
+  - 'LICENSE.md'
+  - vendor/bundle
