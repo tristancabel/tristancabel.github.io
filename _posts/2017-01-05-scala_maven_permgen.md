@@ -39,6 +39,7 @@ After a first google search, I found a good explanation of what PermGen is [here
 `export MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=128m"` but it didn't work. 
 
 Digging a bit more, my second try was to edit the section about *maven-surefire-plugin* in my *pom.xml*  adding options like forkCount, reuseForks, argLine.
+
 ```
 <plugin>
   <groupId>org.apache.maven.plugins</groupId>
@@ -52,6 +53,7 @@ Digging a bit more, my second try was to edit the section about *maven-surefire-
   </configuration>
 </plugin>
 ```
+
 but again it didn't worked and trying to increase MaxPermSize to 1g didn't change anything! Moreover, if I disabled the faulting test, the project was building, and running fine. 
 
 ## the debugging
@@ -87,6 +89,7 @@ Heap Configuration:
 
 ## the solution
 And here is is **MaxPermSize      = 85983232 (82.0MB)**  the options wasn't working. Digging a bit more in pom.xml, I then discovered that we were using another plugin *scalatest* with the following configuration:
+
 ```
 <plugin>
   <groupId>org.scalatest</groupId>
