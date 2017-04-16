@@ -12,24 +12,6 @@
     <nav class="sidebar-nav">
       <a class="sidebar-nav-item{% if page.url == site.baseurl %} active{% endif %}" href="{{ site.baseurl }}/">Home</a>
 
-      {% comment %}
-      <a class="sidebar-nav-item" href="{{ site.github.repo }}">GitHub project</a>
-
-     <ul >
-         {%for post in site.posts %}
-           {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
-           {% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}
-           {% if year != nyear %}
-             </ul> 
-             <h3>{{ post.date | date: '%Y' }}</h3>
-             <ul class="past">
-          {% endif %}
-          <li><time>{{ post.date | date:"%d %b" }}</time>  <a href="{{ post.url }}">{{ post.title }}</a></li>
-         {% endfor %}
-             </ul>
-             
-      {% endcomment %}
-
       {% assign pages_list = site.pages %}
         {% for node in pages_list %}
           {% if node.title != null %}
@@ -43,40 +25,54 @@
       {% for tag in site.tags %}
       <a style="font-size: {{ tag | last | size | times: 100 | divided_by: site.tags.size | plus: 70  }}%" href="{{ site.baseurl }}/tags/#{{ tag | first | slugize }}"> {{ tag | first }}({{tag[1].size}})  </a>
       {% endfor %}
-     
-       <h3> Archives </h3>
-       <ul class="menu-deroulant">
-         {%for post in site.posts %}
-         {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
-         {% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}    
-         {% capture month %}{{ post.date | date: '%b' }}{% endcapture %}
-         {% capture nmonth %}{{ post.next.date | date: '%b' }}{% endcapture %}
-         
-         {% if year != nyear %}
-           {% if nyear.notblank %}
-             </li>
-             </ul> <!-- close month -->
-             </ul> <!-- close year -->
-             </li>
-           {% endif %}
-         <li> <a class="chevron right" href="#"> {{ post.date | date: '%Y' }}</a> 
-         <ul>
-           <li><a class="chevron right" href="#"> {{ post.date | date: '%b' }}</a>
-           <ul>
 
-         {% else %}
-         {% if month != nmonth %}
-           </ul>  <!-- close month -->
-           </li>
-           <li><a class="chevron right" href="#"> {{ post.date | date: '%b' }}</a>
-           <ul>
-         {% endif %}
-       {% endif %}
-       <li><time>{{ post.date | date:"%d" }}</time>  <a href="{{ post.url }}">{{ post.title }}</a></li>
-       {% endfor %}
-       </li> </ul>  <!-- close month -->
-       </li> </ul>   <!-- close year -->
-     </ul>  <!-- close menu -->
+    <h3> Archives  2</h3>
+    <ul  class="menu-deroulant">
+
+  {% for post in site.posts  %}
+    {% capture this_year %}{{ post.date | date: "%Y" }}{% endcapture %}
+    {% capture this_month %}{{ post.date | date: "%B" }}{% endcapture %}
+    {% capture next_year %}{{ post.previous.date | date: "%Y" }}{% endcapture %}
+    {% capture next_month %}{{ post.previous.date | date: "%B" }}{% endcapture %}
+
+    {% if forloop.first %}
+    <li>  <a class="chevron right" href="#"> {{ this_year }}</a>
+    <ul> <!-- open year -->
+      <li><a class="chevron right" href="#"> {{ this_month }}</a>
+      <ul> <!-- open month -->
+    {% endif %}
+
+    <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+
+    {% if forloop.last %}
+    </ul>  <!-- close month -->
+    </li>
+    </ul>
+    </li>   <!-- close year -->
+    {% else %}
+        {% if this_year != next_year %}
+        </ul>  <!-- close month -->
+        </li>
+        </ul>
+        </li>   <!-- close year -->
+        <li>  <a class="chevron right" href="#"> {{ next_year }}</a>
+        <ul> <!-- open year -->
+          <li><a class="chevron right" href="#"> {{ next_month }}</a>
+          <ul> <!-- open month -->
+        {% else %}    
+          {% if this_month != next_month %}
+            </ul>  <!-- close month -->
+            </li>
+            <li><a class="chevron right" href="#"> {{ next_month }}</a>
+            <ul> <!-- open month -->
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+  </ul>
+
+
+
 </nav>
 </div>
    <p style="position:fixed; bottom:0;">&copy; {{ site.time | date: '%Y' }}. All rights reserved.</p>
