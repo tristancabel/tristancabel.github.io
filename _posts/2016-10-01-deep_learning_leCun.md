@@ -54,9 +54,9 @@ Deep learning is non-convex: the order of layers is important!
 ## How to choose layers
 We have to find independant explicative parameters.
 
-Let's take all face images of a person, each picture being  1000x1000 pixels = 1,000,000 dimensions. But the face has 3 cartesian coordinates and 3 Euler angles, and gumans hace less than about 50 muscles in the face. Hence, the manifold of face images for a person has <56 dimensions!  But **we do not have good and general methods to learn functions that turns an image into this kind of representation.**
+Let's take all face images of a person, each picture being  1000x1000 pixels = 1,000,000 dimensions. But the face has 3 cartesian coordinates and 3 Euler angles, and humans have less than about 50 muscles in the face. Hence, the manifold of face images for a person has <56 dimensions!  But **we do not have good and general methods to learn functions that turns an image into this kind of representation.**
 
-But we can do dome invariant feature learning: embed the input non-linearly into a higher dimensional space because in this new space, things that were non separable may become separable. Then pool regions of the new space together (bring together things that are semantically similar or aggregate over space or feature type).
+What we can do is some invariant feature learning: embed the input non-linearly into a higher dimensional space because in this new space, things that were non separable may become separable. Then pool regions of the new space together (bring together things that are semantically similar or aggregate over space or feature type).
 
 ` 1_Layer = { Input -> [Non-Linear Function] -> high-dim features -> [Pooling] -> stable/invariant features }`
 
@@ -79,20 +79,20 @@ Then we can apply chain rule to compute:
  - $\frac{\partial E}{\partial W_k} = \frac{\partial E}{\partial X_k} \frac{\partial F_k(X_{k-1}, W_k)}{\partial W_k}$ with dimensions  $[1 \times N_w] = [1 \times N_x] . [N_x \times N_w]$
  - $\frac{\partial E}{\partial X_{k-1}} = \frac{\partial E}{\partial X_k} \frac{\partial F_k(X_{k-1}, W_k)}{\partial X_{k-1}}$
 
-$\frac{\partial F_k(X_{k-1}, W_k)}{\partial W_k}$ being the *Jacobian matrix of* $F_k$ with respect to $W_k$ and $\frac{\partial F_k(X_{k-1}, W_k)}{\partial X_{k-1}}$ being the *Jacobian matrix of* $F_k$ with respect to $X_{k-1}$. $F_k$ has two jacobian matrices because it has two arguments.
+Here,  $F_k$ has two jacobian matrices because has it hqs two arguments. First, $\frac{\partial F_k(X_{k-1}, W_k)}{\partial W_k}$ the *Jacobian matrix of* $F_k$ with respect to $W_k$ and second, $\frac{\partial F_k(X_{k-1}, W_k)}{\partial X_{k-1}}$ being the *Jacobian matrix of* $F_k$ with respect to $X_{k-1}$.
 
-The back propagation consists of recurring these equations to compute all the $\frac{\partial E}{\partial W_k}$ for $k \in [1,n]$.
+The back propagation consists of recursing these equations to compute all the $\frac{\partial E}{\partial W_k}$ for $k \in [1,n]$.
 One optimization is to use stochastic gradient descent on minibatches instead of sequential values to be able to do parallelization. It's also good to use "dropout" for regularization during training (consist of randomly saying that some of units don't exist and compute the output to ensure that the system is not dependant on one particular unit).
 
 ## Typical multilayer Neural Net Architecture
 Complex learning machines can be built by assembling **modules** into networks. Some examples of modules can be:
 
  - linear module $Out = W.In+B$
- - ReLU Module (Rectified Linear Unit) $Out = 0 if in<0 ; Out = In \space otherwise$ . Nowadays, ReLU are more used than sigmoid because of the small gradient of sigmoid at some points leading to a small learning rate. 
+ - ReLU Module (Rectified Linear Unit) $Out = 0 if in<0 ; Out = In \space otherwise$ . Nowadays, ReLU are more used than sigmoid because of the small gradient of sigmoid at some points leading to a small learning rate. See [quora](https://www.quora.com/What-is-special-about-rectifier-neural-units-used-in-NN-learning) for more information. 
  - Cost Module: squared distance $C= \|\|In_1 - In_2 \|\|^2$
  - cross entropy (good for classification)
 
-# mathematical mysteries of convolutional networks
+# Mathematical mysteries of Convolutional Networks
 Let's take a classification problem, we want to find a minimum of some invariants features to do classification efficiently. Indeed, reducing the dimensionality means that we will need less examples to learn how to do our classification.
 In low dimension, it's quite easy to do some *linear interpolation*, but it's not possible in big dimensionality as the distance between two example is too big. 
 
@@ -109,7 +109,7 @@ Another basic idea is to do a *linear projection*, but most of the time, it will
 </figure>
 
 However, it is really difficult to find such a $\Phi$ ! This is where neural network comes: We make our $\Phi$ as a combination of convolutional nodes ( linear convolutions + non-linear scalar). Let's try to understand what are the mathematics behind it.
-Why hierarchical network cascade? why convolutions? why indtroducing non-linearities? What are the properties of the learned linear operators $L_j$ ? Intuition of how it works is a we go deeper we kill variablility and create invariants! It works a bit like mathematical wavelet filter.
+Why hierarchical network cascade? why convolutions? why introducing non-linearities? What are the properties of the learned linear operators $L_j$ ? Intuition of how it works is a we go deeper we kill variablility and create invariants! It works a bit like mathematical wavelet filter.
 
 Conclusions we can take from Stephane Mallat presentation are :
 
@@ -129,11 +129,11 @@ Conclusions we can take from Stephane Mallat presentation are :
 
 # Convolutional net (CNN)
 
-As an **introduction**, let's take a module taking a time-delayed input $R = F(X_t, X_{t-1}, X_{t-2}, W)$ and we want to have $Y_{t+1} = R$. For example, predict the next character or word in a text, or predict the evolution of stock-market.  We can see that the unit computing $R = F(X_t, X_{t-1}, X_{t-2}, W)$ at instant $t$ is the same that will be used as $t+1$ so weights will be the same. The idea of replicate units is quite used in visual recognition to detect a motif in different parts of a picture (detect a digit in check recognition for example) using **convolution**.
+As an **introduction**, let's take a module taking a time-delayed input $R = F(X_t, X_{t-1}, X_{t-2}, W)$ and we want to have $Y_{t+1} = R$. For example, predict the next character or word in a text, or predict the evolution of stock-market.  We can see that the unit computing $R = F(X_t, X_{t-1}, X_{t-2}, W)$ at instant $t$ is the same that will be used as $t+1$ so weights will be the same. The idea of replicating units is quite used in visual recognition to detect a motif in different parts of a picture (detect a digit in check recognition for example) using **convolution**.
 
 These past few years, the deepness of convolutional nets have increased a lot (ResNet 152 levels, with identity links between even levels to allow  efficient back-propagation). This allow the system to act as an iteratif system.
 
-The basic idea to recognize a form into an image is to apply the same network with a sliding window, however, this implies a window of fized size. Nowadays, there is more efficient modern methods: for example, another idea is to add 4 outpus to the network defining the position of the object inside the window! Another idea is RCNN, 1 network do a detection, then another network look specifically inside this first window.
+The basic idea to recognize a form into an image is to apply the same network with a sliding window, however, this implies a window of fized size. Nowadays, there is more efficient modern methods: for example, another idea is to add 4 outputs to the network defining the position of the object inside the window! Another idea is RCNN, 1 network do a detection, then another network look specifically inside this first window.
 
 A new method for localizing objects is **DeepMask** by *Pinheiro, Collobert, Dollar ICCV 2015* . The idea is not to make a box like earlier but to make a mask of the object. So the system, will be simultanously trained to make an object recoginition and a mask of that object.
 
@@ -162,7 +162,7 @@ Convolutional nets can also be used to perform monuments recognition, face recon
         <li> We can also do loop unrolling to turns recurrent net into feed-forward net with shared weights. </li> 
         <li> RNN can be made with "depth", to learn high-level representations of sequences. </li>
         <li> RNN are prone to vanishing gradient </li>
-        <li> RNN are used to keep information about past events (like speech modelisation) and a false hypothetis was that they need memory to remenber these past information which is false: we need to make the network so that the computation made to calculate the current state from previous state is reversible (meaning we can compute $X(t)$ from $X(t+1$) = bijective function ). </li>
+        <li> RNN are used to keep information about past events (like speech modelisation) and a false hypothetis was that they need memory to remember these past information which is false: we need to make the network so that the computation made to calculate the current state from previous state is reversible (meaning we can compute $X(t)$ from $X(t+1$) = bijective function ). </li>
         <li> We can do some temporal subsampling to increase length of "memory" use a $Z(t-1)$ not to update $Z(t)$ but $Z(t+1)$ </li>
      
      </ul></td>
@@ -170,7 +170,7 @@ Convolutional nets can also be used to perform monuments recognition, face recon
       <figure>
         <div style="text-align: center">
           <img style="display: inline;" src="{{ site.baseurl }}/public/deep_learning_lecun_cdf/recurrent_network.png" alt="recurrent network">
-          <figcaption> Fig1. recurrent network </figcaption>
+          <figcaption> Fig2. recurrent network </figcaption>
         </div>
       </figure>
       </td>
@@ -241,33 +241,43 @@ But the gradient descent is not well-defined in this space.
 slide 73/115 of presentation 003-yann-ollivier
 
 
-
-
-
-
-
 # Energy-based Learning
 
-<div class="row">
-  <div class="col-sm-6 col-md-6 col-xs-6">
-    <img class="pull-left" src="{{ site.baseurl }}/public/deep_learning_lecun_cdf/energy_based_models.png" alt="recurrent network">
-  </div>
-  <div class="col-sm-6 col-md-6 col-xs-6">
-    <p>The basic idea is to do complex inference, for example when we want to do speech recognition, or translation where systems output a structured answer. There isn't a simple and some time there is different outputs possible (translation).
-This model make a scalar value "energy" $E(Y,X)$ , measuring the compatibility between an observed variable X and a variable to be predicted Y. </p>
-<p> What we want to know (the inference) is the $Y$ that minimizes the nergy within a set: $Y^* = argmin_{Y \in y} E(Y,X)$  similitude of *f(Input)* and *output*. </p>
+<table >
+  <col width="50%">
+  <col width="50%">
+  <tbody>
+    <tr>
+      <td style="background:white;">
+      <figure>
+        <div style="text-align: center">
+          <img style="display: inline;" src="{{ site.baseurl }}/public/deep_learning_lecun_cdf/energy_based_models.png" alt="energy based models">
+          <figcaption> Fig3. energy based models </figcaption>
+        </div>
+      </figure>
+      </td>
+      <td style="background:white;"> 
+<p> The basic idea is to do complex inference, for example when we want to do speech recognition, or translation where systems output a structured answer. There isn't a simple and some time there is different outputs possible (translation). </p>
+<p>This model make a scalar value "energy" $E(Y,X)$ , measuring the compatibility between an observed variable X and a variable to be predicted Y. </p>
+<p> What we want to know (the inference) is the $Y$ that minimizes the energy within a set: $Y^* = argmin_{Y \in y} E(Y,X)$  similitude of <strong>f(Input)</strong> and <strong>output</strong>. </p>
 
-<p>However, **energies are uncalibrated**, so energies of two separately-trained systems cannot be combined. To do so, we can turn them into probabilities using for example *Gibbs distribution* :  $P(Y\|X) = \frac{e^{-\beta E(Y,X)}}{ \int_{y \in Y} e^{-\beta E(y,X)}}$  with $\beta$ being the inverse temperature  and $\int_{y \in Y}$ the partition function.    The minus mean that low energy equal high probability. </p>
+<p> However, <strong>energies are uncalibrated</strong>, so energies of two separately-trained systems cannot be combined. To do so, we can turn them into probabilities using for example <i>Gibbs distribution</i> :  $P(Y\|X) = \frac{e^{-\beta E(Y,X)}}{ \int_{y \in Y} e^{-\beta E(y,X)}}$  with $\beta$ being the inverse temperature  and $\int_{y \in Y}$ the partition function. The minus mean that low energy equal high probability. </p>
 
-<p> Often, there is also a third variable $Z$ an "unobserved variable".For example, in face recognition in image with a sliding window, Z can be the position in the picture  </p>
-  </div>
-</div>
+<p>Often, there is also a third variable $Z$ an "unobserved variable".For example, in face recognition in image with a sliding window, Z can be the position in the picture. </p> 
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
 
 ## training an EBM
 
-Training an energy-based model, consists in shaping the energy function so that the energie of the correct answer is lower than the energies of all other answers (lowering the energie of the correct answer, and raising the energies of the other answers) : $E(animal,X) < E(y,X) \forall y \neq animal$
+Training an energy-based model, consists in shaping the energy function so that the energy of the correct answer is lower than energy of all other answers (lowering the energy of correct answer, and raising energy of the other answers) : $E(animal,X) < E(y,X) \forall y \neq animal$
 
-For this, the cost function  we want to minimize is $\Psi (E,S) = \frac{1}{P} \sum\limits_{i=1}^P L(Y^i, E(W,y,X^i)) + R(W)$ with:
+For this, the cost function we want to minimize is $\Psi (E,S) = \frac{1}{P} \sum\limits_{i=1}^P L(Y^i, E(W,y,X^i)) + R(W)$ with:
 
  - $L()$ per-sample loss
  - $Y^i$ desired answer
@@ -326,12 +336,11 @@ $L(Z,W) = D(G_{S-1}, Z_S) + \sum\limits_{i=1}^S \alpha_i \Vert Z_i - G_i (Z_{i-1
 It now requires an optimization step with respect to virtual targets Z. It allows us to add penalties Z, such as sparsity, quantization..
 
 
-#Other network
+# Other network
 
 ## Gating and attention
 Connections are activated depending on context. Input of a unit is selected among several by the softmax output of s sub-network (the unit pay attention to a particular location)
-
-Used for pictures legend,  speech translation
+It's used for pictures legend,  speech translation, ..
 
 ## Memory-augmented neural nets
 Recurrent networks cannot remember things for very long (the cortex only remember things for 20 seconds), so we need a "hippocampus" (a separate memory module). Ex:
